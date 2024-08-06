@@ -9,8 +9,10 @@ sources:
     tables:
       - name: sales
         identifier: raw_cc_sales
+        description: sales data daily per product_id
         columns:
           - name: date_date
+            description: the date the order was made
             tests:
               - not_null
           - name: product_id
@@ -34,15 +36,16 @@ sources:
 
 models:
   - name: stg_raw__sales
+    description: cleaned daily sales data per product_id
     columns:
       - name: date_date
         tests:
           - not_null
       - name: product_id
+        description: product_id (model_color_size)
         tests:
           - not_null
     tests:
       - unique:
           column_name: "(date_date || product_id)"
   - name: stg_raw__stock
-  - name: int_sales_stock

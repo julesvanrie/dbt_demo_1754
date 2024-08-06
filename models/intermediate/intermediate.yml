@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: int_sales_daily
+    columns:
+      - name: date_date
+        tests:
+          - not_null
+          - unique
+  - name: int_sales_stock
