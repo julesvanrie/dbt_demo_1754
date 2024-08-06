@@ -9,9 +9,40 @@ sources:
     tables:
       - name: sales
         identifier: raw_cc_sales
+        columns:
+          - name: date_date
+            tests:
+              - not_null
+          - name: product_id
+            tests:
+              - not_null
+        tests:
+          - unique:
+              column_name: "(date_date || product_id)"
       - name: stock
         identifier: raw_cc_stock
       - name: parcel
         identifier: raw_cc_parcel
+        columns:
+          - name: parcel_id
+            tests:
+              - not_null
+              - unique
+          - name: parcel_tracking
       - name: parcel_product
         identifier: raw_cc_parcel_product
+
+models:
+  - name: stg_raw__sales
+    columns:
+      - name: date_date
+        tests:
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+    tests:
+      - unique:
+          column_name: "(date_date || product_id)"
+  - name: stg_raw__stock
+  - name: int_sales_stock
