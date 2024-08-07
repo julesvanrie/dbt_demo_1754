@@ -1,0 +1,51 @@
+version: 2
+
+# dbt schema = bigquery dataset
+# dbt identifier = bigquery table
+
+sources:
+  - name: raw
+    schema: raw_data_circle
+    tables:
+      - name: sales
+        identifier: raw_cc_sales
+        description: sales data daily per product_id
+        columns:
+          - name: date_date
+            description: the date the order was made
+            tests:
+              - not_null
+          - name: product_id
+            tests:
+              - not_null
+        tests:
+          - unique:
+              column_name: "(date_date || product_id)"
+      - name: stock
+        identifier: raw_cc_stock
+      - name: parcel
+        identifier: raw_cc_parcel
+        columns:
+          - name: parcel_id
+            tests:
+              - not_null
+              - unique
+          - name: parcel_tracking
+      - name: parcel_product
+        identifier: raw_cc_parcel_product
+
+models:
+  - name: stg_raw__sales
+    description: cleaned daily sales data per product_id
+    columns:
+      - name: date_date
+        tests:
+          - not_null
+      - name: product_id
+        description: product_id (model_color_size)
+        tests:
+          - not_null
+    tests:
+      - unique:
+          column_name: "(date_date || product_id)"
+  - name: stg_raw__stock
