@@ -1,27 +1,25 @@
-with 
+with
 
-source as (
+    source as (select * from {{ source("raw", "stock") }}),
 
-    select * from {{ source('raw', 'stock') }}
+    renamed as (
 
-),
+        select
+            model,
+            model_name,
+            color,
+            color_name,
+            size,
+            `new`,
+            concat(model, "_", color, "_", size) as product_id,
+            forecast_stock,
+            stock,
+            price,
+            {{ price_cat('price') }}
 
-renamed as (
+        from source
 
-    select
-        model,
-        model_name,
-        color,
-        color_name,
-        size,
-        `new`,
-        concat(model, "_", color, "_", size) as product_id,
-        forecast_stock,
-        stock,
-        price
+    )
 
-    from source
-
-)
-
-select * from renamed
+select *
+from renamed

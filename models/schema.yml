@@ -23,6 +23,11 @@ sources:
               column_name: "(date_date || product_id)"
       - name: stock
         identifier: raw_cc_stock
+        columns:
+          - name: color
+            tests:
+              - product_not_blue:
+                  color: 'BL'
       - name: parcel
         identifier: raw_cc_parcel
         columns:
@@ -48,4 +53,15 @@ models:
     tests:
       - unique:
           column_name: "(date_date || product_id)"
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date_date
+            - product_id
   - name: stg_raw__stock
+    columns:
+      - name: color
+        tests:
+          - product_not_blue:
+              color: 'BL'
+          - dbt_utils.not_accepted_values:
+              values: ['BL']
